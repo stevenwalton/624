@@ -1,0 +1,6 @@
+*.sw?
+build/
+*.o
+*.a
+*.so
+*.tmp
