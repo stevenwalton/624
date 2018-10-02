@@ -1,6 +1,11 @@
+*
+!*/
+!*.*
 *.sw?
 build/
 *.o
 *.a
 *.so
 *.tmp
+*.cm?
+*.zip

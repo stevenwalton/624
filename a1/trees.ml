@@ -95,16 +95,49 @@ let rec iter t =
   in f t (fun () -> Nomore)
 
 (* Q6 *)
+(* Two ways work, just playing around with hints from Hua *)
 (*
 let rec sum3 tree =
+    let myitr = iter tree in
+    let rec helper itr =
+        match itr with
+        Nomore -> 0
+      | More(i,j) -> i + helper (j ()) in
+    helper myitr 
 ;;
 *)
+let rec sum3 tree =
+    let rec helper itr ans =
+        match itr with
+        Nomore -> ans
+      | More(i,j) -> helper (j ()) (i+ans) in
+    helper (iter tree) 0
+;;
+(* Works too but doesn't exit when finding ANY 0 *)
 (*
 let rec prod3 tree =
+    let myitr = iter tree in
+    let rec helper itr =
+        match itr with
+        Nomore -> 0
+      | More(i,j) -> i * helper (j ()) in
+    helper myitr 
+;;
 *)
-(*
+let rec prod3 tree =
+    let rec helper itr ans =
+        match itr with
+        Nomore -> ans
+      | More(i,j) -> if i = 0 then helper Nomore 0 else helper (j ()) (i*ans) in
+    helper (iter tree) 0
+;;
 let rec avg3 tree =
-*)
+    let rec helper itr (s,len) =
+        match itr with 
+        Nomore -> s/len
+      | More(i,j) -> helper (j ()) ((i+s),(len+1)) in
+    helper (iter tree) (0,0)
+;;
 
      
 
@@ -120,8 +153,6 @@ let _ = print_ans avg1 tr
 let _ = print_ans sum2 tr
 let _ = print_ans prod2 tr
 let _ = print_ans avg2 tr
-(*
 let _ = print_ans sum3 tr
 let _ = print_ans prod3 tr
 let _ = print_ans avg3 tr
-*)

@@ -1,5 +1,4 @@
-Iterator returns a boolean like value, which is Nomore or More. Meaning that 
-either you have gotten to the end of the tree (Nomore) or you have not (More).
-It first goes down the right side of the tree and then the left, transversing
-it once. Because it does this, iter could be used in a function telling it to 
-continue or not. 
+Iter returns a pair that contains the first integer of the tree and then 
+a iter function. It does not evaluate until used in a function. When it does,
+it traverses the left side first, and then the right side. Once evaluated the 
+par would look something like More(integer,More(integer,...(Nomore))
