@@ -1,0 +1,5 @@
+Iterator returns a boolean like value, which is Nomore or More. Meaning that 
+either you have gotten to the end of the tree (Nomore) or you have not (More).
+It first goes down the right side of the tree and then the left, transversing
+it once. Because it does this, iter could be used in a function telling it to 
+continue or not. 
