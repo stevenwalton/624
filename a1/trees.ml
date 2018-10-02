@@ -94,7 +94,8 @@ let rec iter t =
       | Node(j,l,r) -> More(j, fun () -> f l (fun () -> f r k))
   in f t (fun () -> Nomore)
 
-(* Q6 *)
+(* Q7 *)
+
 (* Two ways work, just playing around with hints from Hua *)
 (*
 let rec sum3 tree =
@@ -129,7 +130,7 @@ let rec prod3 tree =
         match itr with
         Nomore -> ans
       | More(i,j) -> if i = 0 then helper Nomore 0 else helper (j ()) (i*ans) in
-    helper (iter tree) 0
+    helper (iter tree) 1
 ;;
 let rec avg3 tree =
     let rec helper itr (s,len) =
@@ -142,6 +143,9 @@ let rec avg3 tree =
      
 
 (* challenge problem: put optionToException and exceptionToOption here *)
+(* Q8 *)
+(*let optionToException ('a -> 'a option) = *)
+
 
 (* a little testing -- commented out since the functions do not exist yet *)
 
@@ -156,3 +160,4 @@ let _ = print_ans avg2 tr
 let _ = print_ans sum3 tr
 let _ = print_ans prod3 tr
 let _ = print_ans avg3 tr
+
