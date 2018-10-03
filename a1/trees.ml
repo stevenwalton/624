@@ -120,7 +120,7 @@ let rec prod3 tree =
     let myitr = iter tree in
     let rec helper itr =
         match itr with
-        Nomore -> 0
+        Nomore -> 1
       | More(i,j) -> i * helper (j ()) in
     helper myitr 
 ;;
@@ -145,6 +145,7 @@ let rec avg3 tree =
 (* challenge problem: put optionToException and exceptionToOption here *)
 (* Q8 *)
 (*let optionToException ('a -> 'a option) = *)
+
 
 
 (* a little testing -- commented out since the functions do not exist yet *)
