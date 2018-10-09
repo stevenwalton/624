@@ -11,6 +11,7 @@ let rec get_var heap str =
   match heap with
       [] -> 0
     | (str',i)::tl -> if str=str' then i else get_var tl str
+
 let rec  set_var heap str num = 
   match heap with
       [] -> [(str,num)]
@@ -25,28 +26,49 @@ let rec interp_exp h e =
     | Var v -> get_var h v
     | Plus(e1,e2)  -> (interp_exp_r e1) + (interp_exp_r e2)
     | Times(e1,e2) -> (interp_exp_r e1) * (interp_exp_r e2)
+
+let poph l h e =
+  let tmp = get_var h e in
+  match l with
+    [] -> ([], h, Skip)
+  | head::tail -> (tail, set_var head e tmp, Skip)
+
+let push_var h s =
+  match h with
+    [] -> empty_heap
+  | head::tail -> (get_var head s,tail)
  
-let rec interp_step h s =
+let rec interp_step l h s =
   match s with
       Skip ->  raise DoNotTakeStepWithSkip 
-    | Assign(v,e) -> (set_var h v (interp_exp h e), Skip)
-    | Seq(Skip,s2) -> (h,s2)
+    | Assign(v,e) -> (l,set_var h v (interp_exp h e), Skip)
+    | Seq(Skip,s2) -> (l,h,s2)
     | Seq(s1,s2) -> 
-      let (h3,s3) = interp_step h s1 in
-      (h3, Seq(s3,s2))
+      let (l2,h3,s3) = interp_step l h s1 in
+      (l2,h3, Seq(s3,s2))
     | If(e,s1,s2) ->
       if((interp_exp h e) <= 0)
-      then (h,s2)
-      else (h,s1)
-    | While(e,s1) -> (h, If(e,Seq(s1,s),Skip))
+      then (l,h,s2)
+      else (l,h,s1)
+    | While(e,s1) -> (l,h, If(e,Seq(s1,s),Skip))
+    | Pushheap -> (h::l,h,Skip) 
+(*
+    | Popheap(e) -> poph l h e
+	(* why does this not give error w/ pushvar/popvar (which aren't defined yet) *)
+*)
+    | Popheap(e) -> let tmp = get_var h e in
+	  match l with
+            [] -> ([],h,Skip)
+          | head::tail -> (tail, set_var head e tmp, Skip)
+    | Pushvar(e) -> push_var h e
     | _ -> raise InterpUnimplemented
 
-let rec iter h s =
+let rec iter l h s =
   match (h,s) with
       (_,Skip) -> get_var h "ans"
-    | _ -> let (h',s') = interp_step h s in iter h' s'
+    | _ -> let (l',h',s') = interp_step l h s in iter l' h' s'
   
-let interp = iter empty_heap
+let interp = iter [] empty_heap
 
 (* the next two bindings really belong in a "main" module, but this
 keeps all the code you need in one place *)

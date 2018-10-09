@@ -1,0 +1,5 @@
+list := [6;3];
+Pushheap;
+x := 1;
+Pushvar x;
+ans = x
