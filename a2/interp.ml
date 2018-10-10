@@ -7,17 +7,18 @@ exception DoNotTakeStepWithSkip
 (* There are simpler heap definitions, but these will be easier
    for extending/modifying to support pushheap, popheap, pushvar, and popvar *)
 let empty_heap = []
+
 let rec get_var heap str = 
   match heap with
       [] -> 0
-    | (str',i)::tl -> if str=str' then i else get_var tl str
+    | (str',i,l)::tl -> if str=str' then i else get_var tl str 
 
 let rec  set_var heap str num = 
   match heap with
-      [] -> [(str,num)]
-    | (str',i)::tl -> if str=str' 
-                      then (str,num)::tl 
-                      else (str',i)::(set_var tl str num)
+      [] -> [(str,num,[])]
+    | (str',i,l)::tl -> if str=str' 
+                      then (str,num,l)::tl
+                      else (str',i,l)::(set_var tl str num)
 
 let rec interp_exp h e =
   let interp_exp_r = interp_exp h in
@@ -27,17 +28,45 @@ let rec interp_exp h e =
     | Plus(e1,e2)  -> (interp_exp_r e1) + (interp_exp_r e2)
     | Times(e1,e2) -> (interp_exp_r e1) * (interp_exp_r e2)
 
+(* Used for testing *)
 let poph l h e =
   let tmp = get_var h e in
   match l with
     [] -> ([], h, Skip)
   | head::tail -> (tail, set_var head e tmp, Skip)
 
-let push_var h s =
+let rec push_var h s =
   match h with
-    [] -> empty_heap
-  | head::tail -> (get_var head s,tail)
- 
+    [] -> [(s,0,[])]
+  | (e,n,l)::tail -> if e = s
+		     then (e,n,n::l)::tail
+		     else (e,n,l)::(push_var tail s)
+(* Helper functions for testing *)
+(* ---------------------------- *)
+(* Removes first element of list *)
+let removeFirst l =
+  match l with
+    [] -> []
+  | h::t -> t
+
+(* Returns first element of list *)
+let firstElem l =
+  match l with 
+    [] -> 0
+  | h::t -> h
+(* ---------------------------- *)
+
+(* Could be more elegant, but this is super clear*)
+let rec pop_var h s =
+  match h with
+    [] ->[(s,0,[])]
+  | (e,n,l)::tail -> if e = s
+		  (*then (e,firstElem l,removeFirst l)::tail*)
+		  then match l with
+		    [] -> (e,0,[])::tail
+		  | theFirst::theEnd -> (e,theFirst,theEnd)::tail
+		  else (e,n,l)::(pop_var tail s)
+
 let rec interp_step l h s =
   match s with
       Skip ->  raise DoNotTakeStepWithSkip 
@@ -56,11 +85,12 @@ let rec interp_step l h s =
     | Popheap(e) -> poph l h e
 	(* why does this not give error w/ pushvar/popvar (which aren't defined yet) *)
 *)
-    | Popheap(e) -> let tmp = get_var h e in
+    | Popheap(e) -> (let tmp = get_var h e in
 	  match l with
             [] -> ([],h,Skip)
-          | head::tail -> (tail, set_var head e tmp, Skip)
-    | Pushvar(e) -> push_var h e
+          | head::tail -> (tail, set_var head e tmp, Skip))
+    | Pushvar(e) -> (l, push_var h e, Skip)
+    | Popvar(e) -> (l, pop_var h e, Skip)
     | _ -> raise InterpUnimplemented
 
 let rec iter l h s =
