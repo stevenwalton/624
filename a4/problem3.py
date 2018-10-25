@@ -2,7 +2,6 @@
 CIS 624
 Assignment 4
 Problem 3
-He He
 Takes two inputs and applies the Ackermann function to them,
 using a Y-combinator.
 '''
