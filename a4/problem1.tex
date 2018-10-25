@@ -1,0 +1,54 @@
+\documentclass[12pt,letter]{article}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amscd}
+\usepackage[latin2]{inputenc}
+\usepackage{t1enc}
+\usepackage[mathscr]{eucal}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{graphics}
+\usepackage{pict2e}
+\usepackage{epic}
+\usepackage{float}
+\numberwithin{equation}{section}
+\usepackage[margin=2.9cm]{geometry}
+\usepackage{epstopdf} 
+\newtheorem{st}{Statement}
+
+
+%\usepackage{amsmath}
+\usepackage{amssymb}
+
+\begin{document}
+\title{CIS 624 Assignment 4 Problem 1}
+
+\author{He He}
+\maketitle 
+
+\noindent
+$T := \lambda xy.$ $x$ \\
+$F := \lambda xy.$ $y$ \\
+$IF := \lambda btf.$ $b$ $t$ $f$\\
+$AND := \lambda ab.$ $IF$ $a$ $b$ $F$\\
+$PRED := \lambda nfx.$ $n (\lambda g.$ $\lambda h.$ $h ( g$ $f )) (\lambda u.$ $x) (\lambda u.$ $u)$\\
+$SUB := \lambda mn.$ $n$ $PRED$ $m$ \\
+$ISZERO := \lambda n.$ $n (\lambda x.$ $F) T$ \\
+$ISEQUAL := ADD(ISZERO(SUB$ $a$ $b)$ $ISZERO(SUB$ $b$ $a))$ \\
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+
+\end{document}
+
+
+
+
