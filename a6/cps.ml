@@ -159,3 +159,37 @@ let rec app_allk flstk x k =
 
 app_allk [(addk 1); (fun x -> timesk x x); (fun x -> (fun k -> k 13))] 5 (fun x -> x);;
 
+
+(* Problem 5: EC *)
+problem 5;;
+
+(* Direct style *)
+let rec sum_wholes l =
+    let helper x = sum_wholes [] in
+    match l with
+      [] -> 0
+    | h::t -> if h < 0 then helper h
+    else h + sum_wholes t
+;;
+
+let l = [1;2;3;4;5];;
+let ans = sum_wholes l;;
+print_int ans;;
+print_newline();;
+
+let l = [2;2;-3;4;5];;
+let ans = sum_wholes l;;
+print_int ans;;
+print_newline();;
+
+
+(* CPS *)
+(*
+let rec sum_wholes l k xk =
+    match l with
+      [] -> 0
+    | h::t -> if h < 0 then xk h
+              else h + sum_wholesk k xk
+;;
+sum_wholesk [0;-1;2;3]
+*)
